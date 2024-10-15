@@ -13,7 +13,7 @@ exports.createProgram = async (req, res) => {
     const program = new Program({
       name,
       description,
-      createdBy: req.user._id, // Assuming user is authenticated
+      createdBy: req.user._id, 
     });
     await program.save();
     res.status(201).json(program);

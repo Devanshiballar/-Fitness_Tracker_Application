@@ -4,7 +4,6 @@ const Workout = require("../models/workoutModel");
 exports.createWorkout = async (req, res) => {
   const { activityType, duration, caloriesBurned } = req.body;
 
-  // Check if all required fields are provided
   if (!activityType || !duration || !caloriesBurned) {
     return res
       .status(400)
