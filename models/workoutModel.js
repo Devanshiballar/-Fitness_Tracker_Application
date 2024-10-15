@@ -20,7 +20,15 @@ const WorkoutSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    date: { type: Date, default: Date.now },
+    startDate: { 
+      type: Date, 
+      required: true 
+  }, 
+  endDate: { 
+      type: Date, 
+      required: true 
+  }, 
+
   },
   { timestamps: true }
 );

@@ -2,27 +2,34 @@ const Workout = require("../models/workoutModel");
 
 // Create Workout (with required fields check)
 exports.createWorkout = async (req, res) => {
-  const { activityType, duration, caloriesBurned } = req.body;
+  const { activityType, duration, caloriesBurned, startDate, endDate } = req.body;
 
-  if (!activityType || !duration || !caloriesBurned) {
-    return res
-      .status(400)
-      .json({
-        message:
-          "All fields are required: activityType, duration, and caloriesBurned.",
+  // Validate required fields
+  if (!activityType || !duration || !caloriesBurned || !startDate || !endDate) {
+      return res.status(400).json({
+          message: "All fields are required: activityType, duration, caloriesBurned, startDate, and endDate.",
       });
   }
 
   try {
-    const workout = new Workout({ ...req.body, user: req.user.id });
-    await workout.save();
+      const workout = new Workout({
+          activityType,
+          duration,
+          caloriesBurned,
+          startDate,
+          endDate,
+          user: req.user.id, // Attach authenticated user ID
+      });
 
-    // Print the workout object
-    console.log("New Workout Created:", workout);
+      await workout.save();
 
-    res.status(201).json(workout);
+      // Print the workout object
+      console.log("New Workout Created:", workout);
+
+      res.status(201).json(workout);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+      console.error('Error creating workout:', error.message);
+      res.status(400).json({ message: error.message });
   }
 };
 
