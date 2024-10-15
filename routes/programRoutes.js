@@ -14,10 +14,10 @@ const { IsAdmin, authenticate } = require("../middleware/authenticate ");
  * @swagger
  * /programs/add:
  *   post:
- *     summary: Create a new fitness program
+ *     summary: Add a new program
  *     tags: [Programs]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -26,152 +26,142 @@ const { IsAdmin, authenticate } = require("../middleware/authenticate ");
  *             $ref: '#/components/schemas/Program'
  *     responses:
  *       201:
- *         description: Program created successfully
+ *         description: The program was successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Program'
  *       400:
- *         description: Invalid input
- *       403:
- *         description: Unauthorized, admin access required
+ *         description: Bad request
  */
+
 router.post("/add", authenticate, IsAdmin, createProgram);
 
 /**
  * @swagger
  * /programs:
  *   get:
- *     summary: Get all fitness programs
+ *     summary: Get all programs
  *     tags: [Programs]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: A list of fitness programs
+ *         description: List of all programs
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Program'
- *       403:
- *         description: Unauthorized, admin access required
  */
-// router.get("/", authenticate, IsAdmin, getPrograms);
+
+router.get("/", authenticate, IsAdmin, getPrograms);
 
 /**
  * @swagger
  * /programs/{id}:
  *   get:
- *     summary: Get a fitness program by ID
+ *     summary: Get a program by ID
  *     tags: [Programs]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: The ID of the program to retrieve
+ *       - in: path
+ *         name: id
  *         schema:
  *           type: string
+ *         required: true
+ *         description: The program ID
  *     responses:
  *       200:
- *         description: A single fitness program
+ *         description: Program data for the provided ID
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Program'
  *       404:
  *         description: Program not found
- *       403:
- *         description: Unauthorized, admin access required
  */
-// router.get("/:id", authenticate, IsAdmin, getProgramById);
+
+router.get("/:id", authenticate, IsAdmin, getProgramById);
 
 /**
  * @swagger
- * /users:
+ * /programs/user:
  *   get:
  *     summary: Get all users
- *     tags: [Users]
+ *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Successfully retrieved all users
+ *         description: List of all users
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   username:
- *                     type: string
- *                   email:
- *                     type: string
- *       400:
- *         description: Bad request
+ *                 $ref: '#/components/schemas/User'
  */
-// router.get("/user", authenticate, IsAdmin, GetAllUser);
+
+router.get("/user", authenticate, IsAdmin, GetAllUser);
 
 /**
  * @swagger
- * /users/{id}:
+ * /programs/users/{id}:
  *   delete:
  *     summary: Delete a user by ID
- *     tags: [Users]
+ *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
- *         description: ID of the user to delete
  *         schema:
  *           type: string
+ *         required: true
+ *         description: The user ID
  *     responses:
  *       200:
- *         description: User deleted successfully
+ *         description: User successfully deleted
  *       404:
  *         description: User not found
- *       400:
- *         description: Bad request
  */
 
 router.delete("/users/:id", authenticate, IsAdmin, DeleteUser);
 
 /**
  * @swagger
- * /workout-stats:
+ * /programs/workout-stats:
  *   get:
- *     summary: Get aggregated workout statistics
- *     tags: [Users]
+ *     summary: Get workout statistics
+ *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: startDate
- *         required: false
  *         schema:
  *           type: string
  *           format: date
- *         description: Start date for the statistics (YYYY-MM-DD)
+ *         required: true
+ *         description: Start date for the statistics
  *       - in: query
  *         name: endDate
- *         required: false
  *         schema:
  *           type: string
  *           format: date
- *         description: End date for the statistics (YYYY-MM-DD)
+ *         required: true
+ *         description: End date for the statistics
  *       - in: query
  *         name: activityType
- *         required: false
  *         schema:
  *           type: string
- *         description: Type of activity (e.g., running, cycling)
+ *         description: The activity type for filtering statistics
  *     responses:
  *       200:
- *         description: Successfully retrieved workout statistics
+ *         description: Workout statistics for the provided filters
  *         content:
  *           application/json:
  *             schema:
@@ -185,26 +175,13 @@ router.delete("/users/:id", authenticate, IsAdmin, DeleteUser);
  *                       activityType:
  *                         type: string
  *                       totalDuration:
- *                         type: integer
+ *                         type: number
  *                       totalCalories:
- *                         type: integer
+ *                         type: number
  *                       averageCalories:
- *                         type: integer
+ *                         type: number
  *                       count:
- *                         type: integer
- *                 goalStats:
- *                   type: object
- *                   properties:
- *                     totalGoals:
- *                       type: integer
- *                     achievedGoals:
- *                       type: integer
- *                     onTrackGoals:
- *                       type: integer
- *                     behindGoals:
- *                       type: integer
- *       400:
- *         description: Bad request
+ *                         type: number
  */
 
 router.get("/workout-stats", authenticate, IsAdmin, GetAggrigate);
