@@ -28,9 +28,9 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerDefinition = {
     openapi: '3.0.0',
     info: {
-        title: ' Team_Collaboration_Management  API',
+        title: ' Fitness Tracker Application',
         version: '1.0.0',
-        description: 'API for managing Team_Collaboration_Management',
+        description: 'API for managing Fitness_Tracker_Application',
     },
     servers: [
         {
